@@ -1,12 +1,81 @@
-﻿<Window x:Class="MSSS_App_SortedDictionary.MainWindow"
+﻿<Window x:Class="MSSS_App_SortedDictionary.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MSSS_App_SortedDictionary"
+        xmlns:local="clr-namespace:MSSS_App_SortedDictionary.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MSSS Staff Management - Dictionary Version" Height="650" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        PreviewKeyDown="Window_PreviewKeyDown">
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="Malin Space Science Systems - Staff Master File" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+        <!-- Left Panel: All Staff -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,0">
+            <TextBlock Text="All Staff Records" FontWeight="Bold" Margin="0,0,0,5"/>
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <ListBox x:Name="lstAllStaff" IsEnabled="True" Height="360">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Focusable" Value="False"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </Border>
+        </StackPanel>
+
+        <!-- Right Panel: Filtering -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10,0,0,0">
+            <TextBlock Text="Filter &amp; Select Records" FontWeight="Bold" Margin="0,0,0,5"/>
+            <Label Content="Filter by Staff Name:"/>
+            <TextBox x:Name="txtNameFilter" Margin="0,0,0,10" TextChanged="txtNameFilter_TextChanged"/>
+            <Label Content="Filter by Staff ID:"/>
+            <TextBox x:Name="txtIdFilter" Margin="0,0,0,10" TextChanged="txtIdFilter_TextChanged"/>
+            <Border BorderBrush="Gray" BorderThickness="1">
+                <ListBox x:Name="lstFilteredStaff" Height="250" SelectionChanged="lstFilteredStaff_SelectionChanged"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Bottom Panel: Selected Details -->
+        <GroupBox Header="Selected Staff Details" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Staff ID:"/>
+                <TextBox x:Name="txtSelectedId" Grid.Column="1" Margin="5" IsReadOnly="True" Focusable="False"/>
+                <Label Grid.Column="2" Content="Staff Name:"/>
+                <TextBox x:Name="txtSelectedName" Grid.Column="3" Margin="5" IsReadOnly="True" Focusable="False"/>
+            </Grid>
+        </GroupBox>
+
+        <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Press [Alt + A] to Add, Update, or Delete a record." HorizontalAlignment="Center" Margin="0,10,0,0" FontStyle="Italic"/>
+
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,10,0,0">
+            <StatusBarItem>
+                <TextBlock x:Name="lblStatus" Text="Application loaded. Data is ready."/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>
+

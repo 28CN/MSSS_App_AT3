@@ -28,9 +28,15 @@
 
         <!-- Left Panel: All Staff -->
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,0">
-            <TextBlock Text="All Staff Records (Read-only)" FontWeight="Bold" Margin="0,0,0,5"/>
+            <TextBlock Text="All Staff Records" FontWeight="Bold" Margin="0,0,0,5"/>
             <Border BorderBrush="Gray" BorderThickness="1">
-                <ListBox x:Name="lstAllStaff" IsEnabled="False" Height="350"/>
+                <ListBox x:Name="lstAllStaff" IsEnabled="True" Height="360">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Focusable" Value="False"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
             </Border>
         </StackPanel>
 
@@ -42,7 +48,7 @@
             <Label Content="Filter by Staff ID:"/>
             <TextBox x:Name="txtIdFilter" Margin="0,0,0,10" TextChanged="txtIdFilter_TextChanged"/>
             <Border BorderBrush="Gray" BorderThickness="1">
-                <ListBox x:Name="lstFilteredStaff" Height="238" SelectionChanged="lstFilteredStaff_SelectionChanged"/>
+                <ListBox x:Name="lstFilteredStaff" Height="250" SelectionChanged="lstFilteredStaff_SelectionChanged"/>
             </Border>
         </StackPanel>
 
@@ -56,9 +62,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Content="Staff ID:"/>
-                <TextBox x:Name="txtSelectedId" Grid.Column="1" Margin="5" IsReadOnly="True"/>
+                <TextBox x:Name="txtSelectedId" Grid.Column="1" Margin="5" IsReadOnly="True" Focusable="False"/>
                 <Label Grid.Column="2" Content="Staff Name:"/>
-                <TextBox x:Name="txtSelectedName" Grid.Column="3" Margin="5" IsReadOnly="True"/>
+                <TextBox x:Name="txtSelectedName" Grid.Column="3" Margin="5" IsReadOnly="True" Focusable="False"/>
             </Grid>
         </GroupBox>
 

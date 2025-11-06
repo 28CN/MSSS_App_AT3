@@ -9,24 +9,14 @@ namespace MSSS_App_Dictionary.Data
 {
     public static class DataManager
     {
+        // Use a Dictionary<TKey, TValue> data structure.
         public static Dictionary<int, string> MasterFile { get; private set; } = new Dictionary<int, string>();
         private static readonly string _fileName = "MalinStaffNamesV3.csv";
-
-        private static string GetFilePath()
-        {
-            string? exePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (string.IsNullOrEmpty(exePath))
-            {
-                MessageBox.Show("Cannot get application directory.", "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw new DirectoryNotFoundException("Application execution path is null.");
-            }
-            return Path.Combine(exePath, "Data", _fileName);
-        }
 
         public static void LoadDataFromFile()
         {
             MasterFile = new Dictionary<int, string>();
-            string filePath = GetFilePath();
+            string filePath = Path.Combine("Data", _fileName);
 
             try
             {
@@ -58,13 +48,12 @@ namespace MSSS_App_Dictionary.Data
 
         public static void SaveDataToFile()
         {
-            string filePath = GetFilePath();
+            string filePath = Path.Combine("Data", _fileName);
             try
             {
                 var lines = new List<string> { "staff_id,staff_name" };
 
-                // 为了确保保存顺序一致，可以先对键进行排序
-                // To ensure a consistent save order, we can sort the keys first.
+                // sort the keys first.
                 var sortedKeys = MasterFile.Keys.ToList();
                 sortedKeys.Sort();
 
@@ -107,6 +96,7 @@ namespace MSSS_App_Dictionary.Data
         {
             Random rand = new Random();
             int potentialId;
+            // Keep generating until found a unique number.
             do
             {
                 potentialId = rand.Next(770000000, 779999999);

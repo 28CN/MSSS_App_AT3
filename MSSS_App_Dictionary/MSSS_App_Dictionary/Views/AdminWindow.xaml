@@ -47,7 +47,6 @@
             </Grid>
 
             <TextBlock Grid.Row="3" x:Name="lblInstructions" TextWrapping="Wrap" Margin="0,20,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="14" LineHeight="22">
-                <!-- Instructions will be set from code-behind -->
             </TextBlock>
 
             <StatusBar Grid.Row="4">

@@ -9,10 +9,11 @@ namespace MSSS_App_Dictionary.Data
 {
     public static class DataManager
     {
-        // Use a Dictionary<TKey, TValue> data structure.
+        // Q4.1 Use a Dictionary<TKey, TValue> data structure.
         public static Dictionary<int, string> MasterFile { get; private set; } = new Dictionary<int, string>();
         private static readonly string _fileName = "MalinStaffNamesV3.csv";
 
+        // Q4.2 Read the data from the .csv file
         public static void LoadDataFromFile()
         {
             MasterFile = new Dictionary<int, string>();
@@ -40,7 +41,7 @@ namespace MSSS_App_Dictionary.Data
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) // Q4.10 Error trapping
             {
                 MessageBox.Show($"An unknown error occurred while loading data:\n{ex.Message}", "Error Loading Data", MessageBoxButton.OK, MessageBoxImage.Error);
             }

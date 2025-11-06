@@ -21,6 +21,7 @@ namespace MSSS_App_Dictionary.Views
             DisplayAllStaff();
         }
 
+        // Q4.3 Display all staff members in the ListBox (set read only in xaml).
         private void DisplayAllStaff()
         {
             lstAllStaff.Items.Clear();
@@ -39,9 +40,10 @@ namespace MSSS_App_Dictionary.Views
                 lstAllStaff.Items.Add($"{staffMember.Key} - {staffMember.Value}");
             }
 
-            lblStatus.Text = $"Loaded {DataManager.MasterFile.Count} staff records.";
+            lblStatus.Text = $"Loaded {DataManager.MasterFile.Count} staff records."; // Q4.10 User feedback via a status strip
         }
 
+        // Q4.4 Staff name filter in real time.
         private void txtNameFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (txtNameFilter.IsFocused)
@@ -64,6 +66,7 @@ namespace MSSS_App_Dictionary.Views
             }
         }
 
+        // Q4.5 Staff ID filter in real time.
         private void txtIdFilter_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (txtIdFilter.IsFocused)
@@ -86,6 +89,7 @@ namespace MSSS_App_Dictionary.Views
             }
         }
 
+        // Q4.8 Display selected staff details.
         private void lstFilteredStaff_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (lstFilteredStaff.SelectedItem == null)
@@ -105,15 +109,23 @@ namespace MSSS_App_Dictionary.Views
             }
         }
 
-        // when Alt + A is pressed, open the AdminWindow
+        // all key handling fuctions.
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             // debug: 
             // MessageBox.Show($"PreviewKeyDown Fired! Key: {e.Key}, Modifiers: {Keyboard.Modifiers}");
 
+            // Q4.9: Alt + A : Open Admin Window
             if (Keyboard.Modifiers == ModifierKeys.Alt && e.SystemKey == Key.A)
             {
                 OpenAdminWindow();
+            }
+
+            // Q4.6 & Q4.7: Alt + C : Clear all Filters
+            else if (Keyboard.Modifiers == ModifierKeys.Alt && e.SystemKey == Key.C)
+            {
+                txtNameFilter.Clear();
+                txtIdFilter.Clear();
             }
         }
 

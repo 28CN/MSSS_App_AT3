@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Diagnostics;
 
 namespace MSSS_App_Dictionary.Data
 {
@@ -16,6 +17,10 @@ namespace MSSS_App_Dictionary.Data
         // Q4.2 Read the data from the .csv file
         public static void LoadDataFromFile()
         {
+            // question 8 stopwatch to measure load time
+            var sw = new Stopwatch();
+            sw.Start();
+
             MasterFile = new Dictionary<int, string>();
             string filePath = Path.Combine("Data", _fileName);
 
@@ -26,17 +31,22 @@ namespace MSSS_App_Dictionary.Data
                     MessageBox.Show($"Error: Data file not found at path:\n{filePath}", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                string[] lines = File.ReadAllLines(filePath);
-                for (int i = 1; i < lines.Length; i++)
+
+                // switch to streamreader after Question 8 IO Optimisation
+                using (var reader = new StreamReader(filePath))
                 {
-                    string line = lines[i];
-                    if (string.IsNullOrWhiteSpace(line)) continue;
-                    string[] parts = line.Split(',');
-                    if (parts.Length == 2 && int.TryParse(parts[0].Trim(), out int id))
+                    string headerLine = reader.ReadLine(); // jump header
+                    string line;
+                    while ((line = reader.ReadLine()) != null) // line by line
                     {
-                        if (!MasterFile.ContainsKey(id))
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 2 && int.TryParse(parts[0].Trim(), out int id))
                         {
-                            MasterFile.Add(id, parts[1].Trim());
+                            if (!MasterFile.ContainsKey(id))
+                            {
+                                MasterFile.Add(id, parts[1].Trim());
+                            }
                         }
                     }
                 }
@@ -45,30 +55,42 @@ namespace MSSS_App_Dictionary.Data
             {
                 MessageBox.Show($"An unknown error occurred while loading data:\n{ex.Message}", "Error Loading Data", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            // stop the stopwatch and log the time taken
+            sw.Stop();
+            Trace.WriteLine($"--- TEST (After): LoadDataFromFile took {sw.ElapsedMilliseconds} ms ---");
         }
 
         public static void SaveDataToFile()
         {
+            // question 8 stopwatch to measure load time
+            var sw = new Stopwatch();
+            sw.Start();
+
             string filePath = Path.Combine("Data", _fileName);
             try
             {
-                var lines = new List<string> { "staff_id,staff_name" };
-
                 // sort the keys first.
                 var sortedKeys = MasterFile.Keys.ToList();
                 sortedKeys.Sort();
 
-                foreach (var key in sortedKeys)
+                using (var writer = new StreamWriter(filePath))
                 {
-                    lines.Add($"{key},{MasterFile[key]}");
+                    writer.WriteLine("staff_id,staff_name"); // header
+                    foreach (var key in sortedKeys)
+                    {
+                        writer.WriteLine($"{key},{MasterFile[key]}"); // save line by line
+                    }
                 }
-
-                File.WriteAllLines(filePath, lines);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to save data to file:\n{ex.Message}", "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            // stop the stopwatch and log the time taken
+            sw.Stop();
+            Trace.WriteLine($"--- TEST (After): SaveDataToFile took {sw.ElapsedMilliseconds} ms ---");
         }
 
         public static int AddStaff(string name)
@@ -97,7 +119,7 @@ namespace MSSS_App_Dictionary.Data
         {
             Random rand = new Random();
             int potentialId;
-            // Keep generating until found a unique number.
+            // Keep generating until found a unique number starting with 77*******.
             do
             {
                 potentialId = rand.Next(770000000, 779999999);

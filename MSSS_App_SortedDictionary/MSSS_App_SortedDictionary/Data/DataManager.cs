@@ -26,17 +26,21 @@ namespace MSSS_App_SortedDictionary.Data
                     MessageBox.Show($"Error: Data file not found at path:\n{filePath}", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
-                string[] lines = File.ReadAllLines(filePath);
-                for (int i = 1; i < lines.Length; i++)
+
+                using (var reader = new StreamReader(filePath))
                 {
-                    string line = lines[i];
-                    if (string.IsNullOrWhiteSpace(line)) continue;
-                    string[] parts = line.Split(',');
-                    if (parts.Length == 2 && int.TryParse(parts[0].Trim(), out int id))
+                    string headerLine = reader.ReadLine(); // jump header
+                    string line;
+                    while ((line = reader.ReadLine()) != null) // line by line
                     {
-                        if (!MasterFile.ContainsKey(id))
+                        if (string.IsNullOrWhiteSpace(line)) continue;
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 2 && int.TryParse(parts[0].Trim(), out int id))
                         {
-                            MasterFile.Add(id, parts[1].Trim());
+                            if (!MasterFile.ContainsKey(id))
+                            {
+                                MasterFile.Add(id, parts[1].Trim());
+                            }
                         }
                     }
                 }
@@ -54,16 +58,16 @@ namespace MSSS_App_SortedDictionary.Data
             {
                 var lines = new List<string> { "staff_id,staff_name" };
 
-                // sort is not needed in SortedDictionary.
-                //var sortedKeys = MasterFile.Keys.ToList();
-                //sortedKeys.Sort();
-
-                foreach (var staff in MasterFile)
+                // switch to StreamWriter for better performance after Question 8 IO Optimisation.
+                using (var writer = new StreamWriter(filePath))
                 {
-                    lines.Add($"{staff.Key},{staff.Value}");
-                }
+                    writer.WriteLine("staff_id,staff_name"); // header
 
-                File.WriteAllLines(filePath, lines);
+                    foreach (var staffMember in MasterFile)
+                    {
+                        writer.WriteLine($"{staffMember.Key},{staffMember.Value}");
+                    }
+                }
             }
             catch (Exception ex)
             {

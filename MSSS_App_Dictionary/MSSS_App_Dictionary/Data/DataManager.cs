@@ -18,8 +18,8 @@ namespace MSSS_App_Dictionary.Data
         public static void LoadDataFromFile()
         {
             // question 8 stopwatch to measure load time
-            var sw = new Stopwatch();
-            sw.Start();
+            //var sw = new Stopwatch();
+            //sw.Start();
 
             MasterFile = new Dictionary<int, string>();
             string filePath = Path.Combine("Data", _fileName);
@@ -57,15 +57,15 @@ namespace MSSS_App_Dictionary.Data
             }
 
             // stop the stopwatch and log the time taken
-            sw.Stop();
-            Trace.WriteLine($"--- TEST (After): LoadDataFromFile took {sw.ElapsedMilliseconds} ms ---");
+            //sw.Stop();
+            //Trace.WriteLine($"--- TEST (After): LoadDataFromFile took {sw.ElapsedMilliseconds} ms ---");
         }
 
         public static void SaveDataToFile()
         {
             // question 8 stopwatch to measure load time
-            var sw = new Stopwatch();
-            sw.Start();
+            //var sw = new Stopwatch();
+            //sw.Start();
 
             string filePath = Path.Combine("Data", _fileName);
             try
@@ -89,8 +89,8 @@ namespace MSSS_App_Dictionary.Data
             }
 
             // stop the stopwatch and log the time taken
-            sw.Stop();
-            Trace.WriteLine($"--- TEST (After): SaveDataToFile took {sw.ElapsedMilliseconds} ms ---");
+            //sw.Stop();
+            //Trace.WriteLine($"--- TEST (After): SaveDataToFile took {sw.ElapsedMilliseconds} ms ---");
         }
 
         public static int AddStaff(string name)

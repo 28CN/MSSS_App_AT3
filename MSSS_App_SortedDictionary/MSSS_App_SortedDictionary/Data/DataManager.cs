@@ -9,70 +9,36 @@ namespace MSSS_App_SortedDictionary.Data
 {
     public static class DataManager
     {
-        // Q4.1 Use a SortedDictionary<TKey, TValue> data structure.
+        // Main data store
         public static SortedDictionary<int, string> MasterFile { get; private set; } = new SortedDictionary<int, string>();
-        private static readonly string _fileName = "MalinStaffNamesV3.csv";
 
-        // Q4.2 Read the data from the .csv file
+        // Create repository instance
+        private static readonly FileRepository _repository = new FileRepository();
+
         public static void LoadDataFromFile()
         {
-            MasterFile = new SortedDictionary<int, string>();
-            string filePath = Path.Combine("Data", _fileName);
+            // question 8 stopwatch to measure load time
+            //var sw = new Stopwatch();
+            //sw.Start();
 
-            try
-            {
-                if (!File.Exists(filePath))
-                {
-                    MessageBox.Show($"Error: Data file not found at path:\n{filePath}", "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
+            MasterFile = _repository.LoadStaff();
 
-                using (var reader = new StreamReader(filePath))
-                {
-                    string headerLine = reader.ReadLine(); // jump header
-                    string line;
-                    while ((line = reader.ReadLine()) != null) // line by line
-                    {
-                        if (string.IsNullOrWhiteSpace(line)) continue;
-                        string[] parts = line.Split(',');
-                        if (parts.Length == 2 && int.TryParse(parts[0].Trim(), out int id))
-                        {
-                            if (!MasterFile.ContainsKey(id))
-                            {
-                                MasterFile.Add(id, parts[1].Trim());
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex) // Q4.10 Error trapping
-            {
-                MessageBox.Show($"An unknown error occurred while loading data:\n{ex.Message}", "Error Loading Data", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            // stop the stopwatch and log the time taken
+            //sw.Stop();
+            //Trace.WriteLine($"--- TEST (After): LoadDataFromFile took {sw.ElapsedMilliseconds} ms ---");
         }
 
         public static void SaveDataToFile()
         {
-            string filePath = Path.Combine("Data", _fileName);
-            try
-            {
-                var lines = new List<string> { "staff_id,staff_name" };
+            // question 8 stopwatch to measure load time
+            //var sw = new Stopwatch();
+            //sw.Start();
 
-                // switch to StreamWriter for better performance after Question 8 IO Optimisation.
-                using (var writer = new StreamWriter(filePath))
-                {
-                    writer.WriteLine("staff_id,staff_name"); // header
+            _repository.SaveStaff(MasterFile);
 
-                    foreach (var staffMember in MasterFile)
-                    {
-                        writer.WriteLine($"{staffMember.Key},{staffMember.Value}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to save data to file:\n{ex.Message}", "Save Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            // stop the stopwatch and log the time taken
+            //sw.Stop();
+            //Trace.WriteLine($"--- TEST (After): SaveDataToFile took {sw.ElapsedMilliseconds} ms ---");
         }
 
         public static int AddStaff(string name)

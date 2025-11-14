@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Data\MalinStaffNamesV3.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
